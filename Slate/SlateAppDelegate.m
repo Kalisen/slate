@@ -32,7 +32,7 @@
 #import "SwitchOperation.h"
 #import "RunningApplications.h"
 #import "GridOperation.h"
-#import <Sparkle/SUUpdater.h>
+#import <Sparkle/Sparkle.h>
 
 @implementation SlateAppDelegate
 
@@ -60,15 +60,19 @@ static EventHandlerRef modifiersEvent;
 }
 
 - (IBAction)relaunch {
-  NSString *launcherSource = [[NSBundle bundleForClass:[SUUpdater class]]  pathForResource:@"relaunch" ofType:@""];
-  NSString *launcherTarget = [NSTemporaryDirectory() stringByAppendingPathComponent:[launcherSource lastPathComponent]];
+  // Sparkle 2 no longer ships the standalone "relaunch" helper that earlier versions of
+  // Slate borrowed from Sparkle 1.x, so relaunching is done with a detached shell that waits
+  // for this process to exit and then re-opens the bundle. The bundle path is passed as $0
+  // so paths containing spaces or quotes are handled safely.
   NSString *appPath = [[NSBundle mainBundle] bundlePath];
-  NSString *processID = [NSString stringWithFormat:@"%d", [[NSProcessInfo processInfo] processIdentifier]];
+  pid_t pid = [[NSProcessInfo processInfo] processIdentifier];
+  NSString *script = [NSString stringWithFormat:
+                      @"while /bin/kill -0 %d >/dev/null 2>&1; do /bin/sleep 0.1; done; /usr/bin/open \"$0\"", pid];
 
-  [[NSFileManager defaultManager] removeItemAtPath:launcherTarget error:NULL];
-  [[NSFileManager defaultManager] copyItemAtPath:launcherSource toPath:launcherTarget error:NULL];
-
-  [NSTask launchedTaskWithLaunchPath:launcherTarget arguments:[NSArray arrayWithObjects:appPath, processID, nil]];
+  NSTask *task = [[NSTask alloc] init];
+  [task setLaunchPath:@"/bin/sh"];
+  [task setArguments:[NSArray arrayWithObjects:@"-c", script, appPath, nil]];
+  [task launch];
   [NSApp terminate:self];
 }
 
@@ -508,18 +512,22 @@ OSStatus OnModifiersChangedEvent(EventHandlerCallRef nextHandler, EventRef theEv
     keyUpLock = [[NSObject alloc] init];
   }
 
-  // Check if Accessibility API is enabled
-  if (!AXAPIEnabled()) {
-    NSAlert *alert = [SlateConfig warningAlertWithKeyEquivalents: [NSArray arrayWithObjects:@"Enable", @"Quit", nil]];
-    [alert setMessageText:[NSString stringWithFormat:@"Slate cannot run without \"Access for assistive devices\". Would you like to enable it?"]];
-    [alert setInformativeText:[NSString stringWithFormat:@"You may be prompted for your administrator password."]];
+  // Check if this process has been granted Accessibility access. Since macOS 10.9 access is
+  // granted per application in System Settings > Privacy & Security > Accessibility; the old
+  // global "Enable access for assistive devices" switch (AXAPIEnabled) no longer exists.
+  // Passing kAXTrustedCheckOptionPrompt makes the system add Slate to that list and prompt.
+  NSDictionary *trustOptions = [NSDictionary dictionaryWithObject:(__bridge id)kCFBooleanTrue
+                                                           forKey:(__bridge NSString *)kAXTrustedCheckOptionPrompt];
+  if (!AXIsProcessTrustedWithOptions((__bridge CFDictionaryRef)trustOptions)) {
+    NSAlert *alert = [SlateConfig warningAlertWithKeyEquivalents: [NSArray arrayWithObjects:@"Open System Settings", @"Quit", nil]];
+    [alert setMessageText:[NSString stringWithFormat:@"Slate cannot run without Accessibility access."]];
+    [alert setInformativeText:[NSString stringWithFormat:@"Enable Slate under System Settings > Privacy & Security > Accessibility, then relaunch Slate."]];
     [alert setAlertStyle:NSCriticalAlertStyle];
     NSInteger alertIndex = [alert runModal];
     if (alertIndex == NSAlertFirstButtonReturn) {
-      SlateLogger(@"User wants to enable Access for assistive devices");
-      NSDictionary* errorDictionary;
-      NSAppleScript* applescript = [[NSAppleScript alloc] initWithSource:@"tell application \"System Events\" to set UI elements enabled to true"];
-      [applescript executeAndReturnError:&errorDictionary];
+      SlateLogger(@"User wants to enable Accessibility access");
+      NSURL *accessibilityPane = [NSURL URLWithString:@"x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"];
+      [[NSWorkspace sharedWorkspace] openURL:accessibilityPane];
     }
     else if (alertIndex == NSAlertSecondButtonReturn) {
       SlateLogger(@"User selected quit");

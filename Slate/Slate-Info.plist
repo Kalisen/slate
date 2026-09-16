@@ -36,5 +36,15 @@
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
 	<string>https://www.ninjamonkeysoftware.com/slate/appcast.xml</string>
+	<!--
+	Sparkle 2 verifies updates with an EdDSA (ed25519) signature. Before publishing an update,
+	run Sparkle's generate_keys once and add the printed public key here:
+
+	<key>SUPublicEDKey</key>
+	<string>base64-public-key-from-generate_keys</string>
+
+	Until then the in-app updater can still start (the bundle is code signed) but no update
+	published through the appcast will be accepted.
+	-->
 </dict>
 </plist>

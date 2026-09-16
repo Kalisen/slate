@@ -2,7 +2,7 @@
 
 Slate is a window management application similar to Divvy and SizeUp (except better and free!). Originally written to replace them due to some limitations in how each work, it attempts to overcome them by simply being extremely configurable. As a result, it may be a bit daunting to get configured, but once it is done, the benefit is huge.
 
-Slate currently works on Mac OS X 10.6 and above
+Slate is a universal binary that runs natively on Apple Silicon (arm64) and Intel (x86_64) Macs, and requires macOS 12 (Monterey) or later. It does not need Rosetta.
 
 ## Summary of Features ##
 
@@ -26,7 +26,7 @@ Big thanks to [philc](https://github.com/philc) for the Window Hints idea (and i
 
 **NEW Installation Instructions**
 
-**Note:** You must turn on the Accessibility API by checking System Preferences > Universal Access > Enable access for assistive devices
+**Note:** Slate needs Accessibility access to move and resize windows. On first launch macOS will offer to add Slate to System Settings > Privacy & Security > Accessibility; enable it there and relaunch Slate.
 
 ### Direct Download ###
 
@@ -38,6 +38,26 @@ Big thanks to [philc](https://github.com/philc) for the Window Hints idea (and i
 Just run this in your terminal:
 
     cd /Applications && curl http://www.ninjamonkeysoftware.com/slate/versions/slate-latest.tar.gz | tar -xz
+
+## Building Slate from Source ##
+
+Requirements: Xcode 14 or later (Xcode 15+ recommended) on macOS 12 or later. The project builds a universal
+(arm64 + x86_64) app; there are no Intel-only dependencies. The Sparkle 2 update framework is fetched
+automatically by Swift Package Manager the first time the project is opened or built.
+
+    git clone https://github.com/jigish/slate.git
+    cd slate
+    xcodebuild -project Slate.xcodeproj -scheme Slate -configuration Release \
+      DEPLOYMENT_LOCATION=NO -derivedDataPath build/DerivedData build
+    lipo -archs build/DerivedData/Build/Products/Release/Slate.app/Contents/MacOS/Slate   # => x86_64 arm64
+
+Local builds are ad-hoc code signed so they run on Apple Silicon without any certificate. Because an ad-hoc
+signature changes on every build, macOS will ask you to re-grant Accessibility access after rebuilding.
+
+To ship builds to other people you need a Developer ID certificate and notarization, and for Sparkle
+updates you need an EdDSA key pair: run Sparkle's `generate_keys` once, put the printed public key in
+`Slate/Slate-Info.plist` under `SUPublicEDKey`, and point `SPARKLE_BIN` at Sparkle's `bin` directory
+before running `script/slate.rb pub` so the appcast enclosure gets signed.
 
 ## Configuring Slate ##
 

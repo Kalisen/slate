@@ -3,11 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		3AA7D09116A6ED1200C81A67 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AA7D09016A6ED1200C81A67 /* WebKit.framework */; };
+		5A1E00030000000000C0DE01 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 5A1E00020000000000C0DE01 /* Sparkle */; };
+		5A1E00050000000000C0DE01 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1E00040000000000C0DE01 /* XCTest.framework */; };
 		3AA7D09516A6EE0200C81A67 /* JSController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7D09416A6EE0200C81A67 /* JSController.m */; };
 		3AA7D09D16A6FC9B00C81A67 /* initialize.js in Resources */ = {isa = PBXBuildFile; fileRef = 3AA7D09A16A6FAE100C81A67 /* initialize.js */; };
 		3B1E86EE16B3627A001B9090 /* JSOperationWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1E86ED16B3627A001B9090 /* JSOperationWrapper.m */; };
@@ -49,8 +51,6 @@
 		3BA1BA6B162F4CFF0026774E /* ShellUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA1BA6A162F4CFF0026774E /* ShellUtils.m */; };
 		3BA1BA6E162F51760026774E /* TestShellUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA1BA6D162F51760026774E /* TestShellUtils.m */; };
 		3BA7485913B1D0F500CFA792 /* MathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA7485813B1D0F500CFA792 /* MathUtils.m */; };
-		3BA85C9A16276DAB00FAAF0B /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA85C9916276DAB00FAAF0B /* Sparkle.framework */; };
-		3BA85C9B16276E9E00FAAF0B /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BA85C9916276DAB00FAAF0B /* Sparkle.framework */; };
 		3BADA37213A2C1ED009E21D8 /* AccessibilityWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BADA37113A2C1ED009E21D8 /* AccessibilityWrapper.m */; };
 		3BB5380413AEDA1B0005CFFC /* ScreenState.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BB5380313AEDA190005CFFC /* ScreenState.m */; };
 		3BBD24BA1580206C00940ABF /* default.slate in Resources */ = {isa = PBXBuildFile; fileRef = 3BBD24B91580206C00940ABF /* default.slate */; };
@@ -110,19 +110,6 @@
 			remoteInfo = Slate;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		3B4D0C3615A3691900B39242 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				3BA85C9B16276E9E00FAAF0B /* Sparkle.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3AA7D09016A6ED1200C81A67 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -206,7 +193,6 @@
 		3BA1BA6D162F51760026774E /* TestShellUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestShellUtils.m; sourceTree = "<group>"; };
 		3BA7485713B1D0F500CFA792 /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		3BA7485813B1D0F500CFA792 /* MathUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MathUtils.m; sourceTree = "<group>"; };
-		3BA85C9916276DAB00FAAF0B /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		3BADA37013A2C1ED009E21D8 /* AccessibilityWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccessibilityWrapper.h; sourceTree = "<group>"; };
 		3BADA37113A2C1ED009E21D8 /* AccessibilityWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AccessibilityWrapper.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		3BB5380213AEDA190005CFFC /* ScreenState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenState.h; sourceTree = "<group>"; };
@@ -273,13 +259,14 @@
 		47C4A2A51384E8890066B6DE /* SlateAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SlateAppDelegate.h; sourceTree = "<group>"; };
 		47C4A2A61384E8890066B6DE /* SlateAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SlateAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		47C4A2A91384E8890066B6DE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		47C4A2B01384E8890066B6DE /* SlateTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlateTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		47C4A2B01384E8890066B6DE /* SlateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		47C4A2B61384E8890066B6DE /* SlateTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SlateTests-Info.plist"; sourceTree = "<group>"; };
 		47C4A2B81384E8890066B6DE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		47C4A2BA1384E8890066B6DE /* SlateTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SlateTests-Prefix.pch"; sourceTree = "<group>"; };
 		47C4A2BB1384E8890066B6DE /* SlateTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SlateTests.h; sourceTree = "<group>"; };
 		47C4A2BD1384E8890066B6DE /* SlateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SlateTests.m; sourceTree = "<group>"; };
 		47C4A2C71384E8B10066B6DE /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		5A1E00040000000000C0DE01 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		47C4A2C91384EA510066B6DE /* SlateConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlateConfig.h; sourceTree = "<group>"; };
 		47C4A2CA1384EA510066B6DE /* SlateConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SlateConfig.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		47C4A2CC1384F26A0066B6DE /* Binding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Binding.h; sourceTree = "<group>"; };
@@ -302,7 +289,7 @@
 			files = (
 				47C4A2C81384E8B10066B6DE /* Carbon.framework in Frameworks */,
 				47C4A2941384E8890066B6DE /* Cocoa.framework in Frameworks */,
-				3BA85C9A16276DAB00FAAF0B /* Sparkle.framework in Frameworks */,
+				5A1E00030000000000C0DE01 /* Sparkle in Frameworks */,
 				3AA7D09116A6ED1200C81A67 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -312,6 +299,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				47C4A2B11384E8890066B6DE /* Cocoa.framework in Frameworks */,
+				5A1E00050000000000C0DE01 /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,7 +534,7 @@
 			isa = PBXGroup;
 			children = (
 				47C4A28F1384E8890066B6DE /* Slate.app */,
-				47C4A2B01384E8890066B6DE /* SlateTests.octest */,
+				47C4A2B01384E8890066B6DE /* SlateTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -554,8 +542,8 @@
 		47C4A2921384E8890066B6DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3BA85C9916276DAB00FAAF0B /* Sparkle.framework */,
 				47C4A2C71384E8B10066B6DE /* Carbon.framework */,
+				5A1E00040000000000C0DE01 /* XCTest.framework */,
 				47C4A2931384E8890066B6DE /* Cocoa.framework */,
 				47C4A2951384E8890066B6DE /* Other Frameworks */,
 			);
@@ -639,13 +627,15 @@
 				47C4A28B1384E8890066B6DE /* Sources */,
 				47C4A28C1384E8890066B6DE /* Frameworks */,
 				47C4A28D1384E8890066B6DE /* Resources */,
-				3B4D0C3615A3691900B39242 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Slate;
+			packageProductDependencies = (
+				5A1E00020000000000C0DE01 /* Sparkle */,
+			);
 			productName = Slate;
 			productReference = 47C4A28F1384E8890066B6DE /* Slate.app */;
 			productType = "com.apple.product-type.application";
@@ -657,7 +647,6 @@
 				47C4A2AB1384E8890066B6DE /* Sources */,
 				47C4A2AC1384E8890066B6DE /* Frameworks */,
 				47C4A2AD1384E8890066B6DE /* Resources */,
-				47C4A2AE1384E8890066B6DE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -666,8 +655,8 @@
 			);
 			name = SlateTests;
 			productName = SlateTests;
-			productReference = 47C4A2B01384E8890066B6DE /* SlateTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 47C4A2B01384E8890066B6DE /* SlateTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -675,16 +664,19 @@
 		47C4A2861384E8890066B6DE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 47C4A2891384E8890066B6DE /* Build configuration list for PBXProject "Slate" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
 			mainGroup = 47C4A2841384E8890066B6DE;
+			packageReferences = (
+				5A1E00010000000000C0DE01 /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
 			productRefGroup = 47C4A2901384E8890066B6DE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -727,22 +719,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		47C4A2AE1384E8890066B6DE /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		47C4A28B1384E8890066B6DE /* Sources */ = {
@@ -878,16 +854,16 @@
 		47C4A2BF1384E8890066B6DE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -896,13 +872,13 @@
 		47C4A2C01384E8890066B6DE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -911,24 +887,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "tmp/$(PROJECT_NAME).dst";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Slate/Slate-Prefix.pch";
 				INFOPLIST_FILE = "Slate/Slate-Info.plist";
 				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -938,24 +911,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "tmp/$(PROJECT_NAME).dst";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Slate/Slate-Prefix.pch";
 				INFOPLIST_FILE = "Slate/Slate-Info.plist";
 				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -965,24 +935,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Slate.app/Contents/MacOS/Slate";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SlateTests/SlateTests-Prefix.pch";
 				INFOPLIST_FILE = "SlateTests/SlateTests-Info.plist";
-				OTHER_LDFLAGS = (
-					"-framework",
-					SenTestingKit,
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
@@ -990,24 +960,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Slate.app/Contents/MacOS/Slate";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SlateTests/SlateTests-Prefix.pch";
 				INFOPLIST_FILE = "SlateTests/SlateTests-Info.plist";
-				OTHER_LDFLAGS = (
-					"-framework",
-					SenTestingKit,
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -1042,6 +1012,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5A1E00010000000000C0DE01 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5A1E00020000000000C0DE01 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A1E00010000000000C0DE01 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 47C4A2861384E8890066B6DE /* Project object */;
 }

@@ -13,3 +13,6 @@ Slate.xcodeproj/xcuserdata/jigish.xcuserdatad/
 # don't version xcode artifacts
 *.xcuserdatad
 tmp
+
+# local xcodebuild output used by CI and manual builds
+build/DerivedData

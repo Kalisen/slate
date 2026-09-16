@@ -29,7 +29,6 @@ APPCAST_SIZE_THRESHOLD = 800
 RELEASE_NOTES_FILENAME = 'VERSION'
 RELEASE_NOTES_SIZE_THRESHOLD = 5000
 SPARKLE_FRAMEWORK = 'Sparkle.framework'
-RELAUNCH = 'relaunch'
 CREATE_DMG = File.join(SCRIPT_DIR, "create-dmg", "create-dmg")
 DMG_STAGING_DIR = File.join(BUILD_DIR, "dmg_staging")
 README_MD_NAME = "README.md"
@@ -37,6 +36,11 @@ README_MD = File.join(BASE_DIR, README_MD_NAME)
 README_TXT_NAME = "README.txt"
 README_TXT = File.join(DMG_STAGING_DIR, README_TXT_NAME)
 LATEST_FILENAME = 'slate-latest.tar.gz'
+# Sparkle 2 requires every appcast enclosure to carry an EdDSA signature. Point SPARKLE_BIN at the
+# "bin" directory of the Sparkle distribution that matches the version resolved by Xcode, e.g.
+#   ~/Library/Developer/Xcode/DerivedData/Slate-*/SourcePackages/artifacts/sparkle/Sparkle/bin
+# It must contain sign_update (and generate_keys, used once to create the key in your keychain).
+SPARKLE_BIN = ENV['SPARKLE_BIN']
 
 def log(msg)
   puts msg
@@ -95,7 +99,6 @@ def dmgify
   FileUtils.cp_r File.join(RELEASE_DIR, APP_FILE), File.join(DMG_STAGING_DIR, APP_FILE)
   File.new(File.join(DMG_STAGING_DIR, APP_FILE, "Contents", "MacOS", APP_NAME)).chmod(0755)
   File.new(File.join(DMG_STAGING_DIR, APP_FILE, "Contents", "Frameworks", SPARKLE_FRAMEWORK, "Sparkle")).chmod(0755)
-  File.new(File.join(DMG_STAGING_DIR, APP_FILE, "Contents", "Frameworks", SPARKLE_FRAMEWORK, "Resources", RELAUNCH)).chmod(0755)
   File.open(README_TXT, 'w') { |f| f.write("Please visit http://github.com/jigish/slate") }
 
   FileUtils.rm_rf(File.join(RELEASE_DIR, DMG_FILE));
@@ -117,8 +120,9 @@ def gen
   # Build
   log "Building ..."
   Dir.chdir(BASE_DIR)
-  `rm -rf #{DEBUG_OUTPUT_DIR} && mkdir -p #{DEBUG_OUTPUT_DIR} && CC="" xcodebuild -scheme "Slate-Debug" DSTROOT="#{DEBUG_OUTPUT_DIR}" clean install`
-  `rm -rf #{RELEASE_OUTPUT_DIR} && mkdir -p #{RELEASE_OUTPUT_DIR} && CC="" xcodebuild -scheme "Slate" DSTROOT="#{RELEASE_OUTPUT_DIR}" clean install`
+  # ONLY_ACTIVE_ARCH=NO forces a universal (arm64 + x86_64) build even for the Debug configuration.
+  `rm -rf #{DEBUG_OUTPUT_DIR} && mkdir -p #{DEBUG_OUTPUT_DIR} && xcodebuild -project Slate.xcodeproj -scheme "Slate" -configuration Debug ONLY_ACTIVE_ARCH=NO DSTROOT="#{DEBUG_OUTPUT_DIR}" clean install`
+  `rm -rf #{RELEASE_OUTPUT_DIR} && mkdir -p #{RELEASE_OUTPUT_DIR} && xcodebuild -project Slate.xcodeproj -scheme "Slate" -configuration Release ONLY_ACTIVE_ARCH=NO DSTROOT="#{RELEASE_OUTPUT_DIR}" clean install`
 
   # Copy
   { DEBUG_DIR => File.join(DEBUG_OUTPUT_DIR, "Applications", APP_FILE), RELEASE_DIR => File.join(RELEASE_OUTPUT_DIR, "Applications", APP_FILE) }.each do |to, from|
@@ -126,7 +130,6 @@ def gen
     FileUtils.cp_r from, File.join(to, APP_FILE)
     File.new(File.join(to, APP_FILE, "Contents", "MacOS", APP_NAME)).chmod(0755)
     File.new(File.join(to, APP_FILE, "Contents", "Frameworks", SPARKLE_FRAMEWORK, "Sparkle")).chmod(0755)
-    File.new(File.join(to, APP_FILE, "Contents", "Frameworks", SPARKLE_FRAMEWORK, "Resources", RELAUNCH)).chmod(0755)
   end
 
   dmgify
@@ -143,6 +146,20 @@ def pub
   Dir.chdir(RELEASE_DIR)
   filename = "slate-#{version}.tar.gz"
   `tar -czf #{filename} #{APP_FILE}`
+
+  # EdDSA signature for the appcast enclosure (Sparkle 2 rejects unsigned updates).
+  if SPARKLE_BIN.nil? || !File.executable?(File.join(SPARKLE_BIN, 'sign_update'))
+    log "ERROR: SPARKLE_BIN must point at a Sparkle 'bin' directory containing sign_update"
+    Dir.chdir(BEGIN_DIR)
+    exit 1
+  end
+  # sign_update prints: sparkle:edSignature="..." length="..."
+  signature_attrs = `"#{File.join(SPARKLE_BIN, 'sign_update')}" "#{filename}"`.strip
+  unless signature_attrs.include?('sparkle:edSignature=')
+    log "ERROR: sign_update did not produce a signature: #{signature_attrs}"
+    Dir.chdir(BEGIN_DIR)
+    exit 1
+  end
 
   # app archive
   size = upload_file(RELEASE_DIR, File.join(FTP_DIR, "versions"), filename, ARCHIVE_SIZE_THRESHOLD, true)
@@ -181,7 +198,8 @@ def pub
     <pubDate>#{Time.now.to_s}</pubDate>
     <enclosure url="https://#{WEB_HOST}/versions/#{filename}"
                sparkle:version="#{version}"
-               length="#{size}"
+               sparkle:minimumSystemVersion="12.0"
+               #{signature_attrs}
                type="#{ARCHIVE_MIME_TYPE}" />
   </item>
   </channel>
