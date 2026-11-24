@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+Fixed:
+- `move`, `push`, `corner`, `throw`, `nudge`, `resize` and `activate-snapshot` reach the target frame in one action in apps whose `AXEnhancedUserInterface` flag is on (set by assistive tools such as dictation apps). The flag is switched off for the duration of the frame change, then restored.
+
 ## 2.0.1
 
 Fixed:

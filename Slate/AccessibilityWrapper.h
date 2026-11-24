@@ -40,6 +40,9 @@
 - (NSSize)getCurrentSize;
 - (BOOL)moveWindow:(NSPoint)thePoint;
 - (BOOL)resizeWindow:(NSSize)theSize;
+- (BOOL)isEnhancedUserInterfaceEnabled;
+- (void)setEnhancedUserInterfaceEnabled:(BOOL)enabled;
+- (BOOL)changeFrameWithoutAnimation:(BOOL (^)(void))frameChange;
 - (BOOL)focus;
 - (BOOL)isMinimizedOrHidden;
 - (NSString *)getTitle;

@@ -89,17 +89,19 @@
 }
 
 - (BOOL)doOperationWithAccessibilityWrapper:(AccessibilityWrapper *)aw screenWrapper:(ScreenWrapper *)sw {
-  BOOL success = NO;
   NSPoint cTopLeft = [aw getCurrentTopLeft];
   NSSize cSize = [aw getCurrentSize];
   NSRect cWindowRect = NSMakeRect(cTopLeft.x, cTopLeft.y, cSize.width, cSize.height);
   NSSize nSize = [self getDimensionsWithCurrentWindowRect:cWindowRect screenWrapper:sw];
-  success = [aw resizeWindow:nSize];
-  NSSize realNewSize = [aw getCurrentSize];
-  NSPoint nTopLeft = [self getTopLeftWithCurrentWindowRect:cWindowRect newSize:realNewSize screenWrapper:sw];
-  success = [aw moveWindow:nTopLeft] && success;
-  success = [aw resizeWindow:nSize] && success;
-  return success;
+  return [aw changeFrameWithoutAnimation:^BOOL {
+    // The first resize can be clipped at the screen edge, hence the second one after the move.
+    BOOL success = [aw resizeWindow:nSize];
+    NSSize realNewSize = [aw getCurrentSize];
+    NSPoint nTopLeft = [self getTopLeftWithCurrentWindowRect:cWindowRect newSize:realNewSize screenWrapper:sw];
+    success = [aw moveWindow:nTopLeft] && success;
+    success = [aw resizeWindow:nSize] && success;
+    return success;
+  }];
 }
 
 - (BOOL)doOperation {

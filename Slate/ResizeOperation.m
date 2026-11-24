@@ -64,18 +64,18 @@
 }
 
 - (BOOL)doOperationWithAccessibilityWrapper:(AccessibilityWrapper *)aw screenWrapper:(ScreenWrapper *)sw {
-  BOOL success = NO;
   NSPoint cTopLeft = [aw getCurrentTopLeft];
   NSSize cSize = [aw getCurrentSize];
   NSRect cWindowRect = NSMakeRect(cTopLeft.x, cTopLeft.y, cSize.width, cSize.height);
   NSSize nSize = [self getDimensionsWithCurrentWindow:cWindowRect screenWrapper:sw];
-  if (!NSEqualSizes(cSize, nSize)) {
-    success = [aw resizeWindow:nSize];
+  if (NSEqualSizes(cSize, nSize)) return NO;
+  return [aw changeFrameWithoutAnimation:^BOOL {
+    BOOL success = [aw resizeWindow:nSize];
     NSSize realNewSize = [aw getCurrentSize];
     NSPoint nTopLeft = [self getTopLeftWithCurrentWindow:cWindowRect newSize:realNewSize];
     success = [aw moveWindow:nTopLeft] && success;
-  }
-  return success;
+    return success;
+  }];
 }
 
 - (BOOL)doOperation {

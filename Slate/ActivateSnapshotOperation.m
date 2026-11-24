@@ -134,8 +134,10 @@
         }
       }
       if (bestSnapshot == nil) continue;
-      [aw moveWindow:[bestSnapshot topLeft]];
-      [aw resizeWindow:[bestSnapshot size]];
+      [aw changeFrameWithoutAnimation:^BOOL {
+        BOOL moved = [aw moveWindow:[bestSnapshot topLeft]];
+        return [aw resizeWindow:[bestSnapshot size]] && moved;
+      }];
     }
   }
   return YES;

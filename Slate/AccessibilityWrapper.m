@@ -24,6 +24,7 @@
 
 static AXUIElementRef systemWideElement = NULL;
 static NSDictionary *unselectableApps = nil;
+static NSString *const ENHANCED_USER_INTERFACE_ATTRIBUTE = @"AXEnhancedUserInterface";
 
 @implementation AccessibilityWrapper
 
@@ -133,6 +134,37 @@ static NSDictionary *unselectableApps = nil;
   }
   if (_size != NULL) CFRelease(_size);
   return YES;
+}
+
+- (BOOL)isEnhancedUserInterfaceEnabled {
+  CFTypeRef _enabled = NULL;
+  BOOL enabled = NO;
+  // Most apps do not expose the attribute at all: an error means it is off.
+  if (AXUIElementCopyAttributeValue(app, (__bridge CFStringRef)ENHANCED_USER_INTERFACE_ATTRIBUTE, &_enabled) == kAXErrorSuccess) {
+    enabled = [(__bridge id)_enabled isKindOfClass:[NSNumber class]] && [(__bridge NSNumber *)_enabled boolValue];
+  }
+  if (_enabled != NULL) CFRelease(_enabled);
+  return enabled;
+}
+
+- (void)setEnhancedUserInterfaceEnabled:(BOOL)enabled {
+  // The result is not checked: AppKit apps apply the change and still report kAXErrorNotImplemented.
+  AXUIElementSetAttributeValue(app, (__bridge CFStringRef)ENHANCED_USER_INTERFACE_ATTRIBUTE, enabled ? kCFBooleanTrue : kCFBooleanFalse);
+}
+
+// Runs the moveWindow:/resizeWindow: calls of frameChange with the app's AXEnhancedUserInterface flag off.
+// Assistive tools turn the flag on, and the app then animates every position/size change: consecutive
+// changes interrupt each other and the window ends up at a partial frame.
+- (BOOL)changeFrameWithoutAnimation:(BOOL (^)(void))frameChange {
+  BOOL wasEnhanced = [self isEnhancedUserInterfaceEnabled];
+  if (wasEnhanced) [self setEnhancedUserInterfaceEnabled:NO];
+  BOOL success = NO;
+  @try {
+    success = frameChange();
+  } @finally {
+    if (wasEnhanced) [self setEnhancedUserInterfaceEnabled:YES];
+  }
+  return success;
 }
 
 - (BOOL)focus {
